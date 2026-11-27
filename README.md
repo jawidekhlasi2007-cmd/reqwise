@@ -86,6 +86,34 @@ Open http://localhost:3000.
 
 **See an example report** works without an API key, in both languages.
 
+## Run the agent from the terminal
+
+The same agents also run from the command line, with no web server and no browser. This is the command for a repeatable run:
+
+```bash
+npm install
+npm run agent -- --input public/samples/spending-limit-srs-ru.md --output report.md --lang ru
+```
+
+| Option | Meaning |
+|---|---|
+| `-i`, `--input` | Requirements document: `.md`, `.txt`, `.docx` or `.pdf` (required) |
+| `-o`, `--output` | Report file. `.json` gives the full structured report; anything else gives Markdown (default `report.md`) |
+| `-l`, `--lang` | Report language, `ru` or `en` (default: the document's language) |
+| `-h`, `--help` | Show help |
+
+The key is read from `GEMINI_API_KEY`: put it in `.env.local` (see Environment setup) or set it for one run:
+
+```bash
+# macOS / Linux
+GEMINI_API_KEY=your-key npm run agent -- --input public/samples/spending-limit-srs-ru.md --output report.md
+
+# Windows PowerShell
+$env:GEMINI_API_KEY="your-key"; npm run agent -- --input public/samples/spending-limit-srs-ru.md --output report.md
+```
+
+The terminal shows each agent as it finishes, then the quality score, the number of problems and clarifying questions, and the path of the saved report. The exit code is `0` on success and `1` on any error, so the command can be used in scripts.
+
 ### Tips for an 8 GB machine
 
 - `npm run dev` uses Turbopack, which compiles faster and lighter than webpack. If it misbehaves, `npm run dev:webpack` uses webpack instead.
@@ -104,6 +132,7 @@ Open http://localhost:3000.
 | `npm run dev` | Development server (Turbopack) |
 | `npm run build` | Production build, includes type checking |
 | `npm start` | Run the production build |
+| `npm run agent -- --input <file> --output <report>` | Run the agent from the terminal (no web server) |
 | `npm run typecheck` | TypeScript check only |
 
 ## Deployment (Vercel)
@@ -240,6 +269,7 @@ lib/
   standards.ts            Citable clauses
   storage.ts              localStorage history
   sample-report.ts        Example reports in English and Russian
+scripts/run-agent.ts      Command-line runner (npm run agent)
 types/index.ts            Shared types
 public/samples/           Sample specifications (English and Russian)
 ```
